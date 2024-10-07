@@ -49,6 +49,19 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation (libs.converter.moshi.v290)
+
+    // Moshi
+    implementation(libs.moshi.kotlin)
+    implementation(libs.moshi)
+    implementation(libs.converter.moshi)
+
+    // OkHttp logging interceptor
+    implementation(libs.logging.interceptor)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

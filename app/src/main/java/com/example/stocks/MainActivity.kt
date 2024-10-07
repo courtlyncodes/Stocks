@@ -11,6 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.stocks.model.StockX
+import com.example.stocks.ui.screens.HomePane
+import com.example.stocks.ui.screens.StocksList
 import com.example.stocks.ui.theme.StocksTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +24,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             StocksTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+              HomePane()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun Greeting(modifier: Modifier = Modifier) {
+    Text(text = "Hello", modifier = modifier.padding(16.dp), fontSize = 250.sp)
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    StocksTheme {
-        Greeting("Android")
-    }
 }

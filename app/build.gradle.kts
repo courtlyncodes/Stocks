@@ -51,6 +51,10 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    // Material 3 Adaptive Library
+    implementation(libs.androidx.adaptive)
+    implementation(libs.androidx.adaptive.layout)
+    implementation(libs.androidx.adaptive.navigation)
     // Retrofit
     implementation(libs.retrofit)
     implementation (libs.converter.moshi.v290)
@@ -67,9 +71,6 @@ dependencies {
 
     testImplementation(libs.junit)
 
-    // MockWebServer for mocking API responses
-    testImplementation (libs.mockwebserver)
-
     // Retrofit for testing
     testImplementation (libs.retrofit)
     testImplementation (libs.converter.gson)
@@ -81,6 +82,7 @@ dependencies {
     testImplementation(libs.moshi.kotlin)
     testImplementation(libs.moshi)
     testImplementation(libs.converter.moshi)
+
     testImplementation(libs.kotlinx.coroutines.test.v160)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

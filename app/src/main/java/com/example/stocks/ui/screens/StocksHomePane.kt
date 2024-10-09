@@ -1,5 +1,6 @@
 package com.example.stocks.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,9 @@ import com.example.stocks.R
 import com.example.stocks.model.StockX
 import com.example.stocks.ui.StocksListUiState
 import com.example.stocks.ui.viewmodel.StocksListViewModel
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 
 @Composable
 fun HomePane(
@@ -43,10 +47,22 @@ fun HomePane(
     }
 }
 
+@Composable
+fun StocksListDetailPane() {
+    val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
+
+    ListDetailPaneScaffold(
+        directive = navigator.scaffoldDirective,
+        value
+}
+
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StocksList(
     stocks: List<StockX>,
+    onCardClick: (StockX),
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -67,7 +83,7 @@ fun StocksList(
                 Text(stringResource(R.string.current_time))
             }
             items(stocks) { stock ->
-                StockItem(stock = stock)
+                StockItem(stock = stock, onCardClick = onCardClick)
             }
         }
     }
@@ -76,6 +92,7 @@ fun StocksList(
 @Composable
 fun StockItem(
     stock: StockX,
+    onCardClick: (StockX),
     modifier: Modifier = Modifier
 ) {
 
@@ -89,6 +106,7 @@ fun StockItem(
         border = CardDefaults.outlinedCardBorder(),
         modifier = modifier
             .padding(8.dp)
+            .clickable(onClick = {onCardClick(stock)})
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,

@@ -1,5 +1,6 @@
 package com.example.stocks.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,37 +36,49 @@ import com.example.stocks.ui.viewmodel.StocksListViewModel
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 
 @Composable
 fun HomePane(
+    onCardClick: (StockX) -> Unit,
     modifier: Modifier = Modifier,
     stocksListViewModel: StocksListViewModel = viewModel(factory = StocksListViewModel.Factory)
 ) {
     when (val uiState = stocksListViewModel.stocksUiState) {
-        is StocksListUiState.Success -> StocksList(stocks = uiState.stocks, modifier = modifier)
+        is StocksListUiState.Success -> StocksList(stocks = uiState.stocks, onCardClick = onCardClick, modifier = modifier.fillMaxWidth())
         is StocksListUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxWidth())
         is StocksListUiState.Error -> ErrorScreen(modifier = modifier.fillMaxWidth())
     }
 }
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun StocksListDetailPane() {
-    val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
-
-    ListDetailPaneScaffold(
-        directive = navigator.scaffoldDirective,
-        value
-}
-
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun StocksList(
-    stocks: List<StockX>,
-    onCardClick: (StockX),
+fun StocksListDetailPane(
     modifier: Modifier = Modifier
 ) {
+    val navigator = rememberListDetailPaneScaffoldNavigator<StockX>()
+
+    val viewModel: StocksListViewModel = viewModel(factory = StocksListViewModel.Factory)
+    var selectedStock by remember {
+        mutableStateOf<StockX>(
+            StockX(
+                currency = "",
+                currentPriceCents = 0,
+                currentPriceTimestamp = 0,
+                name = "",
+                quantity = null,
+                ticker = ""
+            )
+        )
+    }
+
+    BackHandler(navigator.canNavigateBack()) {
+        navigator.navigateBack()
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -78,21 +92,68 @@ fun StocksList(
             )
         },
     ) { innerPadding ->
-        LazyColumn(modifier = modifier.padding(innerPadding)) {
-            item {
-                Text(stringResource(R.string.current_time))
-            }
-            items(stocks) { stock ->
-                StockItem(stock = stock, onCardClick = onCardClick)
-            }
-        }
+        ListDetailPaneScaffold(
+            directive = navigator.scaffoldDirective,
+            value = navigator.scaffoldValue,
+            listPane = {
+                HomePane(
+                    onCardClick = { stock ->
+                        selectedStock = stock
+                        navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, stock)
+                    },
+                    modifier = Modifier
+                )
+            },
+            detailPane = {
+                StockDetail(
+                    stock = selectedStock,
+                    modifier = Modifier
+                )
+            },
+            modifier = modifier.padding(innerPadding)
+        )
     }
 }
 
 @Composable
+fun StockDetail(
+    stock: StockX,
+    modifier: Modifier = Modifier
+) {
+    Column {
+        Text(text = stock.name)
+        Text(text = stock.ticker)
+        Text(text = stock.currency)
+        Text(text = stock.quantity.toString())
+        Text(text = stock.currentPriceCents.toString())
+    }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun StocksList(
+    stocks: List<StockX>,
+    onCardClick: (StockX) -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+        LazyColumn {
+            items(stocks) { stock ->
+                StockItem(
+                    stock = stock,
+                    onCardClick = onCardClick,
+                    modifier = Modifier
+                    )
+            }
+        }
+    }
+
+
+@Composable
 fun StockItem(
     stock: StockX,
-    onCardClick: (StockX),
+    onCardClick: (StockX) -> Unit,
     modifier: Modifier = Modifier
 ) {
 

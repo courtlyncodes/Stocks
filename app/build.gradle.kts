@@ -69,7 +69,7 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.androidx.junit.ktx)
 
-    testImplementation(libs.junit)
+
 
     // Retrofit for testing
     testImplementation (libs.retrofit)
@@ -82,7 +82,8 @@ dependencies {
     testImplementation(libs.moshi.kotlin)
     testImplementation(libs.moshi)
     testImplementation(libs.converter.moshi)
-
+    
+    testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test.v160)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

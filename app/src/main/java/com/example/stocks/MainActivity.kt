@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import com.example.stocks.model.StockX
 import com.example.stocks.ui.screens.HomePane
 import com.example.stocks.ui.screens.StocksList
+import com.example.stocks.ui.screens.StocksListDetailPane
 import com.example.stocks.ui.theme.StocksTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             StocksTheme {
-              HomePane()
+              StocksListDetailPane()
             }
         }
     }

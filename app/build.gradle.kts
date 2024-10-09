@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp").version("2.0.20-1.0.25")
 }
 
 android {
@@ -58,11 +59,29 @@ dependencies {
     implementation(libs.moshi.kotlin)
     implementation(libs.moshi)
     implementation(libs.converter.moshi)
+    ksp(libs.moshi.kotlin.codegen)
 
     // OkHttp logging interceptor
     implementation(libs.logging.interceptor)
+    implementation(libs.androidx.junit.ktx)
 
     testImplementation(libs.junit)
+
+    // MockWebServer for mocking API responses
+    testImplementation (libs.mockwebserver)
+
+    // Retrofit for testing
+    testImplementation (libs.retrofit)
+    testImplementation (libs.converter.gson)
+
+    // Coroutines for testing
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    // Moshi for testing
+    testImplementation(libs.moshi.kotlin)
+    testImplementation(libs.moshi)
+    testImplementation(libs.converter.moshi)
+    testImplementation(libs.kotlinx.coroutines.test.v160)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
